@@ -36,25 +36,25 @@ if duplicates > 0:
 pm2_5_wide = df.pivot_table(index='datetime',
                            columns='site_id',
                           values='pm2_5',
-                          aggfunc=list)
+                          aggfunc='mean')
 
 # Pivot for pm2.5 calibrated
 pm2_5_calibrated_wide = df.pivot_table(index='datetime',
                            columns='site_id',
                           values='pm2_5_calibrated_value',
-                          aggfunc=list)
+                          aggfunc='mean')
 
 # Pivot for pm10_raw
 pm10_wide = df.pivot_table(index='datetime',
                            columns='site_id',
                           values='pm10',
-                          aggfunc=list)
+                          aggfunc='mean')
 
 # Pivot for pm10 calibrated
 pm10_calibrated_wide = df.pivot_table(index='datetime',
                            columns='site_id',
                           values='pm10_calibrated_value',
-                          aggfunc=list)
+                          aggfunc='mean')
 '''
 # Combine all pivoted DataFrames into one.
 frames = [pm2_5_wide, pm2_5_calibrated_wide, pm10_wide, pm10_calibrated_wide]
@@ -100,7 +100,7 @@ combined_wide_df = pd.concat(renamed_frames, axis=1)
 #Re-index to a complete hourly datetime index using min and max datetime values.
 min_datetime = combined_wide_df.index.min()
 max_datetime = combined_wide_df.index.max()
-hourly_grid = pd.date_range(start=min_datetime, end=max_datetime, freq='H')
+hourly_grid = pd.date_range(start=min_datetime, end=max_datetime, freq='h')
 combined_wide_df = combined_wide_df.reindex(hourly_grid)
 
 # Save the final wide-format DataFrame to a CSV file.

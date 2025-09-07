@@ -17,11 +17,6 @@ for file in csv_files:
 df = pd.concat(df_list, ignore_index=True)
 print("Combined shape:", df.shape)
 
-# Remove full-row duplicates
-duplicates = fc.duplicate_check(df, subset=None)
-if duplicates > 0:
-    fc.remove_full_duplicates(df)
-
 # Convert datetime column to datetime
 df['datetime']= pd.to_datetime(df['datetime'], errors='coerce')
 

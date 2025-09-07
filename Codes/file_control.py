@@ -59,9 +59,9 @@ def duplicate_check(df, subset=None):
     print(f"Number of duplicate rows: {num_duplicates}")
     if num_duplicates > 0:
         print("Sample of duplicate rows found:")
-        print(df[duplicate_row].head())
+        print(df[duplicate_row].head(60))
         print("Sample of duplicate rows found at the end:")
-        print(df[duplicate_row].tail())
+        print(df[duplicate_row].tail(40))
     else:
         print("No duplicate rows found.")
     return num_duplicates
