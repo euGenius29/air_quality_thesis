@@ -114,5 +114,9 @@ print("Final Combined DataFrame shape:", combined_wide_df.shape)
 
 print("\nExploratory data analysis of the final wide-format DataFrame:")
 eda.data_description(combined_wide_df)
-print("\nMissing data analysis of the final wide-format DataFrame:")
-eda.missing_data_analysis(combined_wide_df)
+
+#print("\nMissing data analysis of the final wide-format DataFrame:")
+#eda.missing_data_analysis(combined_wide_df)
+
+print("Quaterly divisions of plots")
+eda.quarterly_divisions_plots(combined_wide_df)
