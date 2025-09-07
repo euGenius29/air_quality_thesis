@@ -24,6 +24,13 @@ print("DataFrame with new 'site_id' column:")
 print(df[['site_name', 'site_id']].head())
 print(df.head())
 
+# Check and Remove full-row duplicates
+duplicates = fc.duplicate_check(df)
+if duplicates > 0:
+    fc.remove_full_duplicates(df)
+
+# Standar
+
 # Define the new columns to to pivot the DataFrame.
 # Pivot for pm2.5_raw
 pm2_5_wide = df.pivot_table(index='datetime',
@@ -89,6 +96,13 @@ for frame, name in frames_to_rename:
 
 # Concatenate all the renamed DataFrames into a single, flat DataFrame.
 combined_wide_df = pd.concat(renamed_frames, axis=1)
+
+#Re-index to a complete hourly datetime index using min and max datetime values.
+min_datetime = combined_wide_df.index.min()
+max_datetime = combined_wide_df.index.max()
+hourly_grid = pd.date_range(start=min_datetime, end=max_datetime, freq='H')
+combined_wide_df = combined_wide_df.reindex(hourly_grid)
+
 # Save the final wide-format DataFrame to a CSV file.
 current_name = "02_wide_pm"
 combined_wide_df.to_csv(fc.save_path(dm.csv_folder, current_name), index=True)

@@ -33,9 +33,9 @@ def save_path(csv_folder, current_name):
     Returns:
         str: the path where the combined DataFrame is saved.
     """
-    current_dir = os.path.dirname(csv_folder)
+    #current_dir = os.path.dirname(csv_folder)
     # Go up one level to create the saving folder
-    parentdir = os.path.dirname(current_dir)
+    parentdir = os.path.dirname(csv_folder)
 
     #Construct the dir path to save the combined csv file.
     target_path = os.path.join(parentdir, "data_processed")
@@ -44,3 +44,39 @@ def save_path(csv_folder, current_name):
         print(f"Created directory: {target_path}")
     print(f"Saved to:{target_path} as {current_name}.csv")
     return os.path.join(target_path, f"{current_name}.csv")
+
+def duplicate_check(df, subset=None):
+    """
+    Checks for duplicate rows in the DataFrame.
+    Args:
+        df (pd.DataFrame): The DataFrame to check for duplicates.
+        subset (list, optional): List of columns to consider for identifying duplicates. Defaults to all columns.
+    Returns:
+        int: The number of duplicate rows found.
+    """
+    duplicate_row = df.duplicated(subset=subset, keep=False)
+    num_duplicates = duplicate_row.sum()
+    print(f"Number of duplicate rows: {num_duplicates}")
+    if num_duplicates > 0:
+        print("Sample of duplicate rows found:")
+        print(df[duplicate_row].head())
+        print("Sample of duplicate rows found at the end:")
+        print(df[duplicate_row].tail())
+    else:
+        print("No duplicate rows found.")
+    return num_duplicates
+
+def remove_full_duplicates(df, subset=None):
+    """
+    Removes duplicate rows from the DataFrame.
+    Args:
+        df (pd.DataFrame): The DataFrame to remove duplicates from.
+        subset (list, optional): List of columns to consider for identifying duplicates. Defaults to all columns.
+    Returns:
+        pd.DataFrame: The DataFrame with duplicates removed.
+    """
+    initial_shape = df.shape
+    df_cleaned = df.drop_duplicates(subset=subset, keep='first').reset_index(drop=True)
+    final_shape = df_cleaned.shape
+    print(f"Removed {initial_shape[0] - final_shape[0]} duplicate rows.")
+    return df_cleaned
