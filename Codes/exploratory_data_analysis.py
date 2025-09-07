@@ -23,7 +23,6 @@ def data_description(df):
     print("DataFrame shape:", df.shape)
     print("First few rows of the DataFrame:\n", df.head())
     print("Columns in the DataFrame:", df.columns.tolist())
-    print("Total unique sites:", df['site_id'].nunique())
     print("Last few rows of the DataFrame:\n", df.tail())
 
     #Time range of the data
