@@ -17,12 +17,17 @@ for file in csv_files:
 df = pd.concat(df_list, ignore_index=True)
 print("Combined shape:", df.shape)
 
-#Convert datetime column to datetime
+# Remove complete duplicates
+if fc.duplicate_check(df) > 0:
+    fc.remove_full_duplicates(df)
+
+# Convert datetime column to datetime
 df['datetime']= pd.to_datetime(df['datetime'], errors='coerce')
 
-#Sort the dataframe by datetime and site_name
+# Sort the dataframe by datetime and site_name
 df = df.sort_values(by=['site_name', 'datetime']).reset_index(drop=True)
 print("Sorted shape:", df.shape)
 print(df.head())
+
 current_name = str("01_long")
 df.to_csv(fc.save_path(csv_folder, current_name), index=False)

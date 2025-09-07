@@ -53,8 +53,14 @@ pm10_calibrated_wide = df.pivot_table(index='datetime',
 frames = [pm2_5_wide, pm2_5_calibrated_wide, pm10_wide, pm10_calibrated_wide]
 combined_wide_df = pd.concat(frames,
                              axis=1,
-                             keys=['pm2_5_wide', 'pm2_5_calibrated_wide', 'pm10_wide', 'pm10_calibrated_wide'])
+                             keys=['pm2_5_wide', 'pm2_5_calibrated_wide', 'pm10_wide', 'pm10_calibrated_wide']
+                             )
 
+# Save the final wide-format DataFrame to a CSV file.
+current_name = "02_wide_multilevel_pm"
+combined_wide_df.to_csv(fc.save_path(dm.csv_folder, current_name), index=True)
+
+                             
 print("Pivoted DataFrame shape:", combined_wide_df.shape)
 print("combined_wide_data head", combined_wide_df.head())
 print("combined_wide_data columns", combined_wide_df.columns)
