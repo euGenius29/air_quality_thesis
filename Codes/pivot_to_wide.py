@@ -5,6 +5,7 @@ import re
 import pandas as pd
 import file_control as fc
 import data_merging as dm
+import exploratory_data_analysis as eda
 
 
 # Load the combined dataframe from the data_merging module.
@@ -110,3 +111,8 @@ combined_wide_df.to_csv(fc.save_path(dm.csv_folder, current_name), index=True)
 print("Final Combined DataFrame with Flattened Columns:")
 print(combined_wide_df.head())
 print("Final Combined DataFrame shape:", combined_wide_df.shape)
+
+print("\nExploratory data analysis of the final wide-format DataFrame:")
+eda.data_description(combined_wide_df)
+print("\nMissing data analysis of the final wide-format DataFrame:")
+eda.missing_data_analysis(combined_wide_df)

@@ -1,5 +1,6 @@
 """
-This file contains functions for file control operations such as reading, writing and saving new checkpoints.
+This file contains functions for file control operations such as reading, writing, saving new checkpoints as well as 
+common data cleaning tasks functions needed across multiple modules.
 """
 
 import glob, os
