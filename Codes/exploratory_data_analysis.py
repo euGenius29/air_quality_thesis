@@ -25,6 +25,66 @@ def monthly_counts(df):
 
     return combined_df
 
+def monthly_missing_percent_plot(monthly_missing_percent):
+    """
+    Visualizes the monthly missing percentage for each site
+    using a stacked bar chart.
+
+    Args:
+        monthly_missing_percent (pd.DataFrame): DataFrame with monthly
+                                                missing percentages for each site.
+    """
+    # Visualize the monthly missing percentage for each site
+    sites = [col for col in monthly_missing_percent.columns if col != 'Total Rows']
+    
+    # Iterate through each site (column) and create a separate plot.
+    for site in sites:
+        plt.figure(figsize=(25, 6))
+        
+        # Plot the data for the current site.
+        monthly_missing_percent[site].plot(kind='line', marker='o')
+        
+        # Add labels and a title.
+        plt.title(f"Monthly Missing Data Percentage for: {site}")
+        plt.xlabel("Month")
+        plt.ylabel("Missing Data Percentage (%)")
+        plt.grid(True)
+        plt.xticks(rotation=45, ha="right")
+        plt.tight_layout()
+        plt.show()
+        plt.savefig(f"monthly_missing_percent_{site}", bbox_inches='tight')
+
+
+
+def missing_percentages_plot_overlay(monthly_missing_percent):
+    """
+    Generates a single line plot showing the percentage of missing data per month
+    for all sites, overlaid for easy comparison.
+
+    Args:
+        monthly_missing_percent (pd.DataFrame): The DataFrame with monthly
+                                                   missing percentages.
+    """
+    # Create the figure and axes just once, outside the loop.
+    plt.figure(figsize=(20, 8))
+    ax = plt.gca() # Get the current axes to plot on.
+
+    # Iterate through each site (column) and plot it as a new line on the same axes.
+    for site in monthly_missing_percent.columns:
+        # Use the ax parameter to ensure all plots are drawn on the same figure.
+        monthly_missing_percent[site].plot(ax=ax, kind='line', marker='o', label=site)
+
+    # Add labels and a title.
+    plt.title("Monthly Missing Data Percentage for All Sites (Overlay)")
+    plt.xlabel("Month")
+    plt.ylabel("Missing Data Percentage (%)")
+    plt.grid(True)
+    plt.xticks(rotation=45, ha="right")
+    plt.legend(bbox_to_anchor=(1.05, 1), loc='upper left')
+    plt.tight_layout(rect=[0, 0, 0.85, 1])
+    plt.show()
+    plt.savefig("Overlay.png", bbox_inches='tight')
+
 def data_description(df):
     """
     Provides a general description on the given DataFrame.
@@ -67,6 +127,22 @@ def data_description(df):
     monthly_counts_df = monthly_counts(df)
     print(monthly_counts_df)
     monthly_counts_df.to_csv(fc.save_path(dm.csv_folder, "monthly_counts"), index=True)
+
+    # Express the number of missing monthly counts as a percentage of total rows for each site
+    monthly_missing_percent = (monthly_counts_df.drop(columns=['Total Rows']).div(monthly_counts_df['Total Rows'], axis=0)) * 100
+    print("\nPercentage of missing monthly counts for each site:\n", monthly_missing_percent)
+    monthly_missing_percent.to_csv(fc.save_path(dm.csv_folder, "monthly_missing_percent"), index=True)
+    print("\nMonthly missing percentage saved to CSV.")
+
+    # Plot the monthly missing percentage
+    print("\nPlotting monthly missing percentage per site:")
+    monthly_missing_percent_plot(monthly_missing_percent)
+
+    #Overlaid plot of all sites
+    print("\nPlotting overlaid monthly missing percentage for all sites:")
+    missing_percentages_plot_overlay(monthly_missing_percent)
+
+
 
 
 
@@ -157,7 +233,7 @@ def quarterly_divisions_plots(df):
         # Missing data heatmap (time vs sites) for the quarter
         print(f"\nMissing Data Heatmap for {quarter_label}:")
         plt.figure(figsize=(15,6))
-        sns.heatmap(df.isna().T, cmap="viridis", cbar=False)
+        sns.heatmap(quarterly_df.isna().T, cmap="viridis", cbar=False)
         plt.title("Missing Data Heatmap (sites vs time) - {quarter_label}")
         plt.xlabel("Time")
         plt.ylabel("Sites")

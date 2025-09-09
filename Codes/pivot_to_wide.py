@@ -56,7 +56,7 @@ pm10_calibrated_wide = df.pivot_table(index='datetime',
                            columns='site_id',
                           values='pm10_calibrated_value',
                           aggfunc='mean')
-'''
+
 # Combine all pivoted DataFrames into one.
 frames = [pm2_5_wide, pm2_5_calibrated_wide, pm10_wide, pm10_calibrated_wide]
 combined_wide_df = pd.concat(frames,
@@ -111,12 +111,13 @@ combined_wide_df.to_csv(fc.save_path(dm.csv_folder, current_name), index=True)
 print("Final Combined DataFrame with Flattened Columns:")
 print(combined_wide_df.head())
 print("Final Combined DataFrame shape:", combined_wide_df.shape)
+'''
 
-print("\nExploratory data analysis of the final wide-format DataFrame:")
+print("\nExploratory data analysis of the final DataFrame:")
 eda.data_description(combined_wide_df)
 
 #print("\nMissing data analysis of the final wide-format DataFrame:")
 #eda.missing_data_analysis(combined_wide_df)
 
-print("Quaterly divisions of plots")
-eda.quarterly_divisions_plots(combined_wide_df)
+#print("Quaterly divisions of plots")
+#eda.quarterly_divisions_plots(combined_wide_df)
